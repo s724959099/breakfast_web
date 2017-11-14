@@ -9,9 +9,8 @@
 {% block body %}
 {% endblock %}
 </body>
-{% include "components/test1.html" %}
 <script src="{{ url_for('static', filename='js/main.js',version=version) }}"></script>
-{% include '/components/index.html' %}
+{#{% include '/components/index.html' %}#}
 {% block script %}
 {% endblock %}
 </html>

@@ -15,6 +15,7 @@
     "gulp-sass": "^3.1.0"
   },
   "dependencies": {
+    "gulp-livereload": "^3.8.1",
     "interpret": "^1.0.4"
   }
 }
