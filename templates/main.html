@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ Title }}</title>
+    {% include "static_files.html" %}
+</head>
+<body>
+{% block body %}
+{% endblock %}
+</body>
+{% include "components/test1.html" %}
+<script src="{{ url_for('static', filename='js/main.js',version=version) }}"></script>
+{% include '/components/index.html' %}
+{% block script %}
+{% endblock %}
+</html>

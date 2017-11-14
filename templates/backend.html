@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block body %}
+    <div id="app">
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        let app = new Vue({
+            el: '#app',
+            data: {
+                message: 'ff'
+            },
+        })
+    </script>
+{% endblock %}
