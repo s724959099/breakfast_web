@@ -1,0 +1,39 @@
+@mixin size($w,$h:$w)
+  width: $w
+  height: $h
+
+@mixin max-size($w,$h:$w)
+  max-width: $w
+  max-height: $h
+  +size(100%)
+
+@mixin test($color:black)
+  border: solid 1px $color
+
+@mixin h-center()
+  position: absolute
+  left: 50%
+  transform: translateX(-50%)
+
+@mixin v-center()
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+@mixin center()
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translateX(-50%) translateY(- 50%)
+
+@mixin not-draggable()
+  user-drag: none
+  user-select: none
+  -moz-user-select: none
+  -webkit-user-drag: none
+  -webkit-user-select: none
+  -ms-user-select: none
+
+
+*
+  box-sizing: border-box

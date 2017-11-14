@@ -1,0 +1,62 @@
+// colors
+$gray: #dddddd
+
+
+.gray
+  background-color: $gray !important
+
+.gray-text
+  color: $gray !important
+
+
+
+// font weight
+@for $i from 1 through 9
+  .fw-#{$i}
+    font-weight: #{$i*100}
+
+// margin
+$direction: (('r', 'right'), ('b', 'bottom'), ('l', 'left'), ('t', 'top'), ('a', 'all'))
+
+@for $i from 1 through 5
+  @each $a, $b in $direction
+    .m#{$a}-#{$i*10}px
+      @if $a != 'a'
+        margin-#{$b}: 10px * $i !important
+      @else
+        @extend .mr-#{$i*10}px
+        @extend .mb-#{$i*10}px
+        @extend .ml-#{$i*10}px
+        @extend .mt-#{$i*10}px
+
+
+
+// padding
+$direction: (('r', 'right'), ('b', 'bottom'), ('l', 'left'), ('t', 'top'), ('a', 'all'))
+
+@for $i from 1 through 5
+  @each $a, $b in $direction
+    .p#{$a}-#{$i*10}px
+      @if $a != 'a'
+        padding#{$b}: 10px * $i !important
+      @else
+        @extend .pr-#{$i*10}px
+        @extend .pb-#{$i*10}px
+        @extend .pl-#{$i*10}px
+        @extend .pt-#{$i*10}px
+
+
+// opacity
+@for $i from 1 through 99
+  @if $i < 10
+    .o-0#{$i}
+      opacity: #{$i/100}
+  @else if $i%10==0
+    .o-#{$i/10}
+      opacity: #{$i/100}
+  @else
+    .o-#{$i}
+      opacity: #{$i/100}
+// overflow hidden
+.overflow-hidden
+  overflow: hidden
