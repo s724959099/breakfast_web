@@ -18,7 +18,15 @@ my_version = {
 def index():
     local = locals()
     local.update(my_version)
-    return render_template("backend.html", **local)
+    return render_template("page/index.html", **local)
+
+
+# @app.route("/")
+# def index():
+#     local = locals()
+#     local.update(my_version)
+#     return render_template("backend.html", **local)
+
 
 
 if __name__ == "__main__":

@@ -6,11 +6,21 @@
     {% include "static_files.html" %}
 </head>
 <body>
-{% block body %}
-{% endblock %}
+<div id="app">
+    {% block body %}
+
+    {% endblock %}
+
+</div>
+
 </body>
+
+{% include '/components/index.html' %}
 <script src="{{ url_for('static', filename='js/main.js',version=version) }}"></script>
-{#{% include '/components/index.html' %}#}
+<script src="{{ url_for('static', filename='js/py.js',version=version) }}"></script>
+<script>
+
+</script>
 {% block script %}
 {% endblock %}
 </html>

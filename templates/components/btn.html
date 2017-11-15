@@ -1,0 +1,20 @@
+<template id="btn">
+    <v-btn
+            v-bind="$attrs"
+            @click.native="click_it"
+    ><slot></slot></v-btn>
+</template>
+<script>
+    Vue.component('m-btn', {
+        template: '#btn',
+        data(){
+            return {
+            }
+        },
+        methods:{
+            click_it(){
+                this.$emit("click")
+            }
+        }
+    })
+</script>

@@ -1,16 +1,21 @@
 {% extends "main.html" %}
 {% block body %}
-    <div id="app">
-    okok
-    </div>
+    <template id="backend">
+    <v-btn>123</v-btn>
+    <v-btn color="primary">444</v-btn>
+    <v-btn color="red light-1">444</v-btn>
+    </template>
 {% endblock %}
 {% block script %}
     <script>
-        let app = new Vue({
-            el: '#app',
+        new Vue({
+            el: '#backend',
             data: {
                 message: 'ff'
             },
+            mounted(){
+
+            }
         })
     </script>
 {% endblock %}

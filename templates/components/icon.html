@@ -1,0 +1,35 @@
+<template id="icon">
+    <v-btn icon @click.native.stop="click"
+           :ripple="ripple"
+    >
+        <v-icon
+                v-bind="$attrs"
+                v-on="$listeners"
+                :ripple="ripple"
+        >
+            <slot></slot>
+        </v-icon>
+    </v-btn>
+</template>
+<script>
+    Vue.component('m-icon', {
+        template: '#icon',
+        props: {
+            ripple: {
+                default: false
+            }
+        },
+        data () {
+
+            return {}
+        },
+        methods: {
+            click(e){
+                this.$emit('click', e)
+            }
+        },
+        mounted(){
+        }
+    })
+</script>
+
