@@ -1,5 +1,4 @@
 from Model.dbModel import db
-import uuid
 import random
 import datetime
 from libs.flask_get import *
