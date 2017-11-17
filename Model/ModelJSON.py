@@ -2,7 +2,7 @@ import datetime
 from Model.dbModel import db
 
 
-def db_to_str(cls, relations=None, date_formate="%Y/%m/%d"):
+def db_to_str(cls, relations=None, date_formate="%Y-%m-%d %H:%M"):
     if relations is None:
         relations = []
     for key, val in cls.__dict__.items():
@@ -31,12 +31,12 @@ def db_to_str(cls, relations=None, date_formate="%Y/%m/%d"):
 
 
 class BaseJSON:
-    def __new__(cls, arg, relations=None):
+    def __new__(cls, arg, relations=None, **kwargs):
         if relations is None:
             relations = []
         if arg is None:
             return
-        db_to_str(arg, relations)
+        db_to_str(arg, relations, **kwargs)
         dOutput = arg.__dict__
         # dOutput.pop("CreateDate", None)
         # dOutput.pop("CreateBy", None)
@@ -50,5 +50,5 @@ class BaseJSON:
                 dOutput.pop(name, None)
 
         for relation in relations:
-            dOutput.pop(relation) if not isinstance(relation,tuple) else dOutput.pop(relation[0])
+            dOutput.pop(relation) if not isinstance(relation, tuple) else dOutput.pop(relation[0])
         return dOutput

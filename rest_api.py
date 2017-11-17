@@ -18,7 +18,7 @@ class UsersResourece(Resource):
         result = []
         for item in items:
             item = BaseJSON(item, [
-                ('work_dates', lambda q: q.filter_by(deleted=False).all())
+                ('work_dates', lambda q: q.order_by(WorkDates.create_date.desc()).filter_by(deleted=False).first())
             ])
             result.append(item)
         return result

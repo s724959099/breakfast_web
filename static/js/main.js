@@ -13,4 +13,8 @@ Vue.use(Vuetify, {
 
     }
 })
-console.log("yoyoyo")
+
+function get_url(path) {
+    return `${window.location.href}/api/${path}`
+}
+window.get_url = get_url
