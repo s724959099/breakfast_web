@@ -88,6 +88,16 @@ class UsersIdWorkDatesResourece(Resource):
 
 
 @avoid_err
+class UsersIdWorkDatesIdResourece(Resource):
+    def put(self, _id, _workdates_id):
+        workdate = WorkDates.query.filter_by(user_id=_id, id=_workdates_id).scalar()
+        workdate.to_time = datetime.datetime.now()
+        db.session.commit()
+
+        return UsersIdResourece().get(_id)
+
+
+@avoid_err
 class WorkDatesResourece(Resource):
     def get(self):
         items = WorkDates.query.filter_by(deleted=False).all()

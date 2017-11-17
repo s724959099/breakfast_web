@@ -18,18 +18,23 @@
                             最後上下班時間
                         </div>
                         <div class="row between-xs">
-                            <span>上班：</span>
-                            <span class="time red--text lighten-1">
-                                ${try_it(item.work_dates_instance,'from_time')}
+                            <div class="col-xs-6">
+                                <span>上班：</span>
+                                <span class="time red--text lighten-1">
+                                ${work_time(item.work_dates_instance,'from_time')}
                             </span>
-                            <span>下班：</span>
-                            <span class="time red--text lighten-1">
-                                ${try_it(item.work_dates_instance,'to_time')}
+                            </div>
+                            <div class="col-xs-6">
+                                <span>下班：</span>
+                                <span class="time red--text lighten-1">
+                                ${work_time(item.work_dates_instance,'to_time')}
                             </span>
+                            </div>
                         </div>
                         <m-btn class="fill-width mt-20px"
                                :color="is_work(item)?'error':'success'"
-                               >
+                               @click="change_work(item)"
+                        >
                             ${work_btn_status(item)}
                         </m-btn>
                     </v-card-text>
@@ -49,26 +54,54 @@
                 users: []
             },
             methods: {
+                change_work(item){
+                    if (this.is_work(item)) {
+                        let url = get_url(
+                            `/users/${item.id}/workdates/${item.work_dates_instance.id}`)
+                        axios.put(url)
+                            .then(res => {
+                                this.init()
+                            })
+                    } else {
+                        let url = get_url(`/users/${item.id}/workdates`)
+                        axios.post(url)
+                            .then(res => {
+                                this.init()
+                            })
+                    }
+                },
                 is_work(item){
-                    return this.try_it(item.work_dates_instance, 'from_time') !== ''
+                    let result = this.try_it(item.work_dates_instance, 'to_time')
+                    return !(result === false || result !== '')
                 },
                 work_btn_status(item){
                     return this.is_work(item)
                         ? '下班' : '上班'
                 },
+                work_time(item, arg){
+                    let result = this.try_it(item, arg)
+                    if (result === false) {
+                        return ''
+                    }
+                    return result
+
+                },
                 try_it(item, arg){
                     try {
                         return item[arg]
                     } catch (e) {
-                        return ""
+                        return false
                     }
+                },
+                init(){
+                    axios.get(get_url('/users'))
+                        .then((res) => {
+                            this.users = res.data
+                        })
                 }
             },
             mounted(){
-                axios.get(get_url('/users'))
-                    .then((res) => {
-                        this.users = res.data
-                    })
+                this.init()
             }
         })
     </script>

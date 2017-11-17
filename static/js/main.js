@@ -15,6 +15,6 @@ Vue.use(Vuetify, {
 })
 
 function get_url(path) {
-    return `${window.location.href}/api/${path}`
+    return `${window.location.href}api/${path}`
 }
 window.get_url = get_url
