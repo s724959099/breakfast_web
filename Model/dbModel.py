@@ -16,8 +16,12 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
+def get_uuid():
+    return str(uuid.uuid1())
+
+
 class Users(db.Model):
-    id = db.Column(db.String, primary_key=True, default=str(uuid.uuid1()))
+    id = db.Column(db.String, primary_key=True, default=get_uuid)
     name = db.Column(db.String)
     create_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.datetime.now)
     update_date = db.Column(db.DateTime(timezone=True))
@@ -35,7 +39,7 @@ class WorkDates(db.Model):
     delete_date = db.Column(db.DateTime(timezone=True))
     deleted = db.Column(db.Boolean, nullable=False, default=False)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('Users', backref=db.backref('work_dates', lazy=True))
+    user = db.relationship('Users', backref=db.backref('work_dates', lazy='dynamic'))
 
 
 if __name__ == '__main__':

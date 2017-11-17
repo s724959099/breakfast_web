@@ -1,5 +1,7 @@
 from flask import *
 from libs.functools import *
+from contextlib import contextmanager
+from Model.dbModel import db
 
 
 def form_get(var, deafult=None):
@@ -22,28 +24,26 @@ def session_get(var, deafult=None):
 
 def json_check_var(list):
     def not_found(s):
-        return return_arg_lack("not found json arg:{}".format(s))
-
-    def not_json():
-        return return_format_error("not json type")
+        return "not found json arg:{}".format(s), 520
 
     def get_func(fn):
         @wraps(fn)
         def get_func_args(*args, **kwargs):
             try:
                 if request.json is None:
-                    return not_json()
+                    return not_found()
                 for l in list:
                     if l not in request.json:
                         return not_found(l)
             except:
-                return not_json()
+                return not_found()
 
             return fn(*args, **kwargs)
 
         return get_func_args
 
     return get_func
+
 
 def form_check_var(list):
     def not_found(s):
@@ -96,3 +96,15 @@ def args_check_var(list):
 
     return get_func
 
+
+def try_catch(fn):
+    @wraps(fn)
+    def inside(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            print(str(e))
+            db.session.rollback()
+            return str(e), 500
+
+    return inside
