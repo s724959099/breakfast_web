@@ -2,6 +2,7 @@ from SwaggerWrapper import *
 from libs.flask_get import *
 from Model.dbModel import *
 from Model.ModelJSON import *
+from utli.utli import *
 
 
 def avoid_err(cls):
@@ -52,6 +53,7 @@ class UsersIdResourece(Resource):
         name = json_get('name')
         item = Users.query.filter_by(deleted=False, id=_id).scalar()
         item.name = name
+        item.update_date = datetime.datetime.now()
         db.session.commit()
 
         item = Users.query.filter_by(deleted=False, id=_id).scalar()
@@ -65,6 +67,7 @@ class UsersIdResourece(Resource):
         if item is None:
             return False
         item.deleted = True
+        item.update_date = datetime.datetime.now()
         db.session.commit()
 
         return True
@@ -76,7 +79,7 @@ class UsersIdWorkDatesResourece(Resource):
         user = Users.query.filter_by(deleted=False, id=_id).scalar()
         if user is None:
             return False
-        item = WorkDates(user=user)
+        item = WorkDates(user=user, from_time=work_time_format(datetime.datetime.now()))
         db.session.add(item)
         db.session.commit()
 
@@ -90,8 +93,10 @@ class UsersIdWorkDatesResourece(Resource):
 @avoid_err
 class UsersIdWorkDatesIdResourece(Resource):
     def put(self, _id, _workdates_id):
-        workdate = WorkDates.query.filter_by(user_id=_id, id=_workdates_id).scalar()
-        workdate.to_time = datetime.datetime.now()
+        item = WorkDates.query.filter_by(user_id=_id, id=_workdates_id).scalar()
+        item.to_time = work_time_format(datetime.datetime.now())
+        item.update_date = datetime.datetime.now()
+
         db.session.commit()
 
         return UsersIdResourece().get(_id)
@@ -115,6 +120,7 @@ class WorkDatesIdResourece(Resource):
         if item is None:
             return False
         item.deleted = True
+        item.update_date = datetime.datetime.now()
         db.session.commit()
 
         return True
