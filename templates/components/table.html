@@ -12,7 +12,7 @@
             hide-actions
     >
         <!--:pagination.sync="pagination" remove this to append data-->
-        <template slot="headers" slot-scope="props">
+        <template slot="headers" slot-scope="props" class="ttttt">
             <tr>
                 <th v-if="selectable"
                     :style="{width:'80px'}"
@@ -37,21 +37,16 @@
             </tr>
         </template>
         <template slot="items" slot-scope="props">
-            <tr :active="props.selected"
-                :class="{'light-blue lighten-4':tr_color(props)}"
-            >
-                <td v-if="selectable">
-                    <v-checkbox
-                            v-if="selected_view_custom(props.item)"
-                            primary
-                            hide-details
-                            v-model="props.selected"
-                    ></v-checkbox>
-                </td>
-                <slot name="items"
-                      :item="props.item"
-                ></slot>
-            </tr>
+            <td v-if="selectable">
+                <v-checkbox
+                        primary
+                        hide-details
+                        v-model="props.selected"
+                ></v-checkbox>
+            </td>
+            <slot name="items"
+                  :item="props.item"
+            ></slot>
         </template>
     </v-data-table>
 </template>
@@ -190,6 +185,7 @@
 
 
     Vue.component('m-table', {
+        delimiters: ['${', '}'],
         template: "#table",
         mixins: [table_mixin, table_method],
         components: {},

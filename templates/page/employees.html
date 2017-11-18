@@ -1,20 +1,26 @@
 {% extends "layout_base.html" %}
 {% block body %}
-    <v-container>
-        <m-table
-        :headers="headers"
-        :items="items"
-        v-model="selected"
-        selectable
-        ref="table">
-        <template slot="items" slot-scope="props">
-          <td class="pointer text-xs-left pl-0 o-5">${props.item._id + 1}</td>
-          <td class="pointer text-xs-left pl-0">${props.item.title}</td>
-          <td class="pointer text-xs-right">
-            <m-icon @click="go_next(props.item.id)">more_vert</m-icon>
-          </td>
-        </template>
-      </m-table>
+    <v-container fluid>
+        <v-card>
+            <v-card-text>
+                <m-table
+                        :headers="headers"
+                        :items="items"
+                        v-model="selected"
+                        selectable
+                        ref="table">
+                    <template slot="items" slot-scope="props">
+
+                        <td class="text-xs-left pl-0 o-5">${props.item._id + 1}</td>
+                        <td class="text-xs-left pl-0">${props.item.title}</td>
+                        <td class="text-xs-right">
+                            <m-icon @click="">more_vert</m-icon>
+                        </td>
+                    </template>
+                </m-table>
+            </v-card-text>
+        </v-card>
+
     </v-container>
 {% endblock %}
 {% block script %}
@@ -22,14 +28,14 @@
         new Vue({
             mixins: [app],
             data: {
-                selected:[],
+                selected: [],
                 items: [
-                    {title:'test'},
-                    {title:'test'},
-                    {title:'test'},
-                    {title:'test'},
-                    {title:'test'},
-                    {title:'test'},
+                    {title: 'test'},
+                    {title: 'test'},
+                    {title: 'test'},
+                    {title: 'test'},
+                    {title: 'test'},
+                    {title: 'test'},
                 ],
                 headers: [
                     {text: 'No'},

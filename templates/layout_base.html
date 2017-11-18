@@ -1,15 +1,15 @@
 {% extends "main.html" %}
 {% block body_wrap %}
     <v-app v-cloak>
-        <v-navigation-drawer :mini-variant.sync="mini"
+        <v-navigation-drawer :mini-variant.sync="nav__mini"
                              fixed
-                             v-model="drawer"
+                             v-model="nav__drawer"
                              app
                              width="200"
         >
             <v-divider></v-divider>
             <v-list dense class="pt-0">
-                <v-list-tile v-for="item in items" :key="item.title" @click="" :href="item.href">
+                <v-list-tile v-for="item in nav__items" :key="item.title" @click="" :href="item.href">
                     <v-list-tile-action>
                         <v-icon>${ item.icon }</v-icon>
                     </v-list-tile-action>
@@ -25,7 +25,7 @@
             <v-toolbar-side-icon @click="toolbar_btn"></v-toolbar-side-icon>
             <v-toolbar-title class="white--text">打卡系統</v-toolbar-title>
         </v-toolbar>
-        <v-content app>
+        <v-content app fluid>
             {% block body %}
             {% endblock %}
         </v-content>
@@ -38,9 +38,9 @@
         window.app = {
             el: '#app',
             data: {
-                drawer: null,
-                mini: false,
-                items: [
+                nav__drawer: null,
+                nav__mini: false,
+                nav__items: [
                     {title: '打卡', icon: 'gavel',href:'/'},
                     {title: '員工', icon: 'face',href:'/employees'},
                     {title: '上班時間', icon: 'date_range',href:'/work-time'},
@@ -49,15 +49,16 @@
             methods: {
                 toolbar_btn(){
                     if (window.innerWidth <= 1264) {
-                        this.drawer = !this.drawer
-                        this.mini = false
+                        this.nav__drawer = !this.nav__drawer
+                        this.nav__mini = false
                     } else {
                         this.drawer = true
-                        this.mini = !this.mini
+                        this.nav__mini = !this.nav__mini
                     }
                 }
             },
             mounted(){
+                install_theme(this)
             }
         }
     </script>
