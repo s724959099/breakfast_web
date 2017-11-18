@@ -1,0 +1,238 @@
+<template id="table">
+    <v-data-table
+            ref="table"
+            v-model="selected"
+            :headers="headers"
+            :items="items"
+            select-all
+            :pagination.sync="pagination"
+            :selected-key="key_id"
+            :item-key="key_id"
+            class="table"
+            hide-actions
+    >
+        <!--:pagination.sync="pagination" remove this to append data-->
+        <template slot="headers" slot-scope="props">
+            <tr>
+                <th v-if="selectable"
+                    :style="{width:'80px'}"
+                >
+                    <v-checkbox
+                            v-if="radio===false"
+                            primary
+                            hide-details
+                            @click.native="toggleAll"
+                            v-model="props.all"
+                            :indeterminate="props.indeterminate"
+                    ></v-checkbox>
+                </th>
+                <th v-for="header in props.headers" :key="header.text"
+                    class="pl-0 o-87"
+                    :class="[header.align === 'right' ? 'text-xs-right' : 'text-xs-left', 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                    @click="changeSort(header)"
+                    :style="{width:header.width}"
+                >
+                    ${ header.text }
+                </th>
+            </tr>
+        </template>
+        <template slot="items" slot-scope="props">
+            <tr :active="props.selected"
+                :class="{'light-blue lighten-4':tr_color(props)}"
+            >
+                <td v-if="selectable">
+                    <v-checkbox
+                            v-if="selected_view_custom(props.item)"
+                            primary
+                            hide-details
+                            v-model="props.selected"
+                    ></v-checkbox>
+                </td>
+                <slot name="items"
+                      :item="props.item"
+                ></slot>
+            </tr>
+        </template>
+    </v-data-table>
+</template>
+
+<script>
+    let table_mixin = {
+        props: {
+            items: Array,
+            selectable: Boolean,
+            editable: Boolean,
+            value: {
+                default: () => [],
+                type: Array
+            },
+        },
+        data(){
+            return {
+                selected: this.value,
+                delete_items: [],
+                pagination: {
+                    sortBy: null,
+                    rowsPerPage: this.items.length
+                },
+
+            }
+        },
+        watch: {
+            selected(val){
+                if (this.radio && len(val) >= 2) {
+                    val.shift()
+                }
+                this.$emit("input", val)
+            },
+            items(val){
+                this.pagination.rowsPerPage = this.items.length
+            },
+            value(val){
+                this.selected = val
+            },
+            "items.length"(){
+                this.init_id()
+            }
+        },
+        mounted(){
+            this.init_table()
+        }
+    }
+
+
+    let table_method = {
+        methods: {
+            remove_selected(){
+                for (const item of this.selected) {
+                    restapi.action.delete(() => {
+                    }, item.id)
+                }
+                this.items.remove(this.selected)
+                this.selected = []
+
+
+            },
+            append(data){
+                if (Array.isArray(data)) {
+                    for (let item of data) {
+                        item._type = "create"
+                        item._edit = false
+                        this.items.append(item)
+                    }
+                } else {
+                    data._type = "create"
+                    data._edit = false
+                    this.items.append(data)
+                }
+
+            },
+            copy_selected(){
+                let result = []
+                for (let obj of this.selected) {
+                    let new_obj = {}
+                    for (let key of Object.keys(obj)) {
+                        let item = obj[key]
+                        new_obj[key] = item
+                    }
+                    result.append(new_obj)
+                }
+
+                return result
+            },
+            cut_selected(){
+                let data = this.copy_selected()
+                this.selected = []
+                return data
+            },
+            init_item(call_back){
+                let index = 0
+                for (let item of this.items) {
+                    call_back(item, index)
+                    index++
+                }
+            },
+            init_id(){
+                this.init_item((item, key) => {
+                    item._id = key
+                })
+            },
+            init_table(){
+                this.init_item((item, key) => {
+                    item._id = key
+                    item._type = "read"
+                    item._edit = false
+                })
+            },
+            new_item(item){
+                item._type = "create"
+                item._edit = false
+                item._id = this.items.length
+            },
+            toggleAll () {
+                if (this.selected.length) this.selected = []
+                else this.selected = this.items.slice()
+            },
+            changeSort (header) {
+                if (header.sortable === false) {
+                    return false
+                }
+                if (this.pagination.sortBy === header.value) {
+                    this.pagination.descending = !this.pagination.descending
+                } else {
+                    this.pagination.sortBy = header.value
+                    this.pagination.descending = false
+                }
+            },
+
+        },
+    }
+
+
+    Vue.component('m-table', {
+        template: "#table",
+        mixins: [table_mixin, table_method],
+        components: {},
+        props: {
+            headers: Array,
+            selected_view_custom: {
+                type: Function,
+                default: (item) => {
+                    return true
+                }
+            },
+            key_id: {
+                type: String,
+                default: '_id',
+            },
+            radio: {
+                type: Boolean,
+                default: false,
+            }
+        },
+        data () {
+
+            return {}
+        },
+        computed: {},
+        methods: {
+            check_box(item){
+                print("okok", item)
+            },
+            tr_color(props){
+                if (props.selected) return false
+                if (props.item._type === "create" &&
+                    props.item._edit === false) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+
+
+        },
+        mounted(){
+        }
+    })
+</script>
+

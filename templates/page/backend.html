@@ -1,0 +1,61 @@
+{% extends "main.html" %}
+{% block body %}
+    <v-app cloak>
+        <v-navigation-drawer :mini-variant.sync="mini"
+                             fixed
+                             app
+        >
+            <v-toolbar flat>
+                <v-list>
+                    <v-list-tile>
+                        <v-list-tile-title class="title">
+
+                        </v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-list dense class="pt-0">
+                <v-list-tile v-for="item in items" :key="item.title" @click="" href="/">
+                    <v-list-tile-action>
+                        <v-icon>${ item.icon }</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            ${ item.title }
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+        </v-navigation-drawer >
+        <v-toolbar dark color="primary" class="row middle-xs" app>
+                <v-toolbar-side-icon @click="mini =! mini"></v-toolbar-side-icon>
+                <v-toolbar-title class="white--text">打卡系統</v-toolbar-title>
+            </v-toolbar>
+        <v-content class="backend-main" app>
+            <v-container>
+                test123
+            </v-container>
+        </v-content>
+
+
+    </v-app>
+{% endblock %}
+{% block script %}
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                mini: true,
+                items: [
+                    {title: '員工', icon: 'face'},
+                    {title: '上班時間', icon: 'date_range'},
+                ],
+            },
+            methods: {
+            },
+            mounted(){
+            }
+        })
+    </script>
+{% endblock %}

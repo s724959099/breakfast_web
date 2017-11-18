@@ -1,14 +1,9 @@
-{% extends "main.html" %}
+{% extends "layout_base.html" %}
 {% block body %}
-    <v-app id="#app">
-        <v-toolbar dark color="primary">
-            <v-toolbar-side-icon></v-toolbar-side-icon>
-            <v-toolbar-title class="white--text">打卡系統</v-toolbar-title>
-        </v-toolbar>
-        <v-content v-cloak>
-            <v-container>
+    <v-container>
                 <v-card v-for="item in users"
                         class="mb-5"
+                        :key="item.id"
                 >
                     <v-card-title class="card-title">
                         ${item.name}
@@ -18,15 +13,15 @@
                             最後上下班時間
                         </div>
                         <div class="row between-xs">
-                            <div class="col-xs-6">
-                                <span>上班：</span>
-                                <span class="time red--text lighten-1">
+                            <div class="col-xs-6 row">
+                                <span class="col-xs-12 col-sm">上班：</span>
+                                <span class="col-xs-12 col-sm  time red--text lighten-1">
                                 ${work_time(item.work_dates_instance,'from_time')}
                             </span>
                             </div>
-                            <div class="col-xs-6">
-                                <span>下班：</span>
-                                <span class="time red--text lighten-1">
+                            <div class="col-xs-6 row">
+                                <span clsas="col-xs-12 col-sm">下班：</span>
+                                <span class="col-xs-12 col-sm time red--text lighten-1">
                                 ${work_time(item.work_dates_instance,'to_time')}
                             </span>
                             </div>
@@ -40,16 +35,12 @@
                     </v-card-text>
                 </v-card>
             </v-container>
-        </v-content>
-        </div>
-
-    </v-app>
 
 {% endblock %}
 {% block script %}
     <script>
         new Vue({
-            el: '#app',
+            mixins:[app],
             data: {
                 users: []
             },

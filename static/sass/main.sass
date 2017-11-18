@@ -1,5 +1,6 @@
 @import "tool"
-
+*
+  box-sizing: border-box
 // default style for pkg
 .row
   padding: 0px
@@ -7,8 +8,15 @@
 .btn
   margin: 0px
 
+.navigation-drawer
+  //position: fixed
+
 .test
   +test
+
+.test-full
+  *
+    +test
 
 .fill-width
   width: 100%
@@ -36,4 +44,5 @@
 
 [v-cloak]
   display: none
+
 
