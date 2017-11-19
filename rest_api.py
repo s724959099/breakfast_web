@@ -15,13 +15,8 @@ def avoid_err(cls):
 @avoid_err
 class UsersResourece(Resource):
     def get(self):
-        items = Users.query.filter_by(deleted=False).all()
-        result = []
-        for item in items:
-            item = BaseJSON(item, [
-                ('work_dates', lambda q: q.order_by(WorkDates.create_date.desc()).filter_by(deleted=False).first())
-            ])
-            result.append(item)
+        item = Users.query.filter_by(deleted=False).all()
+        result = UsersJSON(item)
         return result
 
     @json_check_var(['name'])
@@ -32,10 +27,7 @@ class UsersResourece(Resource):
         )
         db.session.add(user)
         db.session.commit()
-        user = Users.query.get(user.id)
-        item = BaseJSON(user, [
-            ('work_dates', lambda q: q.filter_by(deleted=False).all())
-        ])
+        item = UsersJSON(user, arr=True)
         return item
 
 
@@ -43,9 +35,13 @@ class UsersResourece(Resource):
 class UsersIdResourece(Resource):
     def get(self, _id):
         item = Users.query.filter_by(deleted=False, id=_id).scalar()
-        result = BaseJSON(item, [
-            ('work_dates', lambda q: q.filter_by(deleted=False).all())
-        ])
+        result = UsersJSON(item, arr=True)
+        from_time = args_get('from_time')
+        to_time = args_get('to_time')
+        from_time = datetime.datetime.strptime(from_time, '%Y-%m-%d')
+        to_time = datetime.datetime.strptime(to_time, '%Y-%m-%d') + datetime.timedelta(days=1)
+
+        result = UsersJSON(item, from_time=from_time, to_time=to_time, arr=True)
         return result
 
     @json_check_var(['name'])
@@ -56,16 +52,11 @@ class UsersIdResourece(Resource):
         item.update_date = datetime.datetime.now()
         db.session.commit()
 
-        item = Users.query.filter_by(deleted=False, id=_id).scalar()
-        result = BaseJSON(item, [
-            ('work_dates', lambda q: q.filter_by(deleted=False).all())
-        ])
+        result = UsersJSON(item, arr=True)
         return result
 
     def delete(self, _id):
         item = Users.query.filter_by(deleted=True, id=_id).scalar()
-        if item is None:
-            return False
         item.deleted = True
         item.update_date = datetime.datetime.now()
         db.session.commit()
@@ -83,10 +74,7 @@ class UsersIdWorkDatesResourece(Resource):
         db.session.add(item)
         db.session.commit()
 
-        item = WorkDates.query.filter_by(deleted=False, id=item.id).scalar()
-        if item is None:
-            return False
-        result = BaseJSON(item, ['user'])
+        result = WorkDatesJSON(item)
         return result
 
 
@@ -99,17 +87,15 @@ class UsersIdWorkDatesIdResourece(Resource):
 
         db.session.commit()
 
-        return UsersIdResourece().get(_id)
+        result = WorkDatesJSON(item, deep=False)
+        return result
 
 
 @avoid_err
 class WorkDatesResourece(Resource):
     def get(self):
         items = WorkDates.query.filter_by(deleted=False).all()
-        result = []
-        for item in items:
-            item = BaseJSON(item, ['user'])
-            result.append(item)
+        result = WorkDatesJSON(item)
         return result
 
 

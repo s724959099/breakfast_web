@@ -6,19 +6,19 @@ from Model.ModelJSON import *
 
 # import time
 
-user = Users.query.first()
-w = WorkDates.query.filter_by(user=user).first()
+A_U = Users.query.first()
+
+from_time = '2017-11-16'
+to_time = '2017-11-17'
+from_time = datetime.datetime.strptime(from_time, '%Y-%m-%d')
+to_time = datetime.datetime.strptime(to_time, '%Y-%m-%d') + datetime.timedelta(days=1)
+
+A_W = WorkDates.query.filter_by(user=A_U).filter(WorkDates.from_time > from_time, WorkDates.to_time < to_time).all()
+
 # # AA = BaseJSON(w, ['user'])
 # user.test13 = 'gggc'
 # AA = BaseJSON(user, [
 #     ('work_dates', lambda q: q.filter_by(deleted=False).first())
 # ])
 
-AAB = UsersJSON(user, arr=True)
-print("user called")
-AAA = WorkDatesJSON(w, arr=True)
-AAB.pop("_sa_instance_state")
-AAA.pop("_sa_instance_state")
-print(AAB)
-print(AAA)
 print("done")
