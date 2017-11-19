@@ -3,10 +3,11 @@
     <v-container fluid>
         <v-card>
             <v-card-title class="title">
-                <div class="row between-xs middle-xs fill-width pr-3">
-                    <h3>所有員工</h3>
-                    <div class="row middle-xs end-xs col-sm-4 col-xs-12">
+                <div class="row between-xs fill-width pr-3">
+                    <h3>${user.name}</h3>
+                    <div class="row middle-xs end-xs col-sm-6 col-lg-8">
                         <v-menu
+                                class="col-xs-12 col-md"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -27,6 +28,7 @@
                             </v-date-picker>
                         </v-menu>
                         <v-menu
+                                class="col-xs-12 col-md"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -54,6 +56,21 @@
                 </div>
             </v-card-title>
             <v-card-text>
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1 mr-3"
+                    >
+                        <m-btn color="primary">Add</m-btn>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1 mr-3"
+                    >
+                        <m-btn color="error"
+                               :disabled="selected.length===0"
+                        >Delete
+                        </m-btn>
+                    </div>
+                    <div class="div col-xs last-xs text-xs-right">Total: <span class="red--text">${total}</span></div>
+
+                </div>
                 <m-table
                         :headers="headers"
                         :items="items"
@@ -62,10 +79,12 @@
                         ref="table">
                     <template slot="items" slot-scope="props">
 
-                        <td class="text-xs-left pl-0" >
-                            <a :href="props.item.id">${props.item.name}</a>
-                        </td>
+                        <td class="text-xs-left pl-0">${props.item.from_time}</td>
+                        <td class="text-xs-left pl-0">${props.item.to_time}</td>
                         <td class="text-xs-left pl-0">${props.item.work_hours}</td>
+                        <td class="text-xs-right">
+                            <m-icon @click="">more_vert</m-icon>
+                        </td>
                     </template>
                 </m-table>
             </v-card-text>
@@ -82,27 +101,21 @@
                 to_time: null,
                 selected: [],
                 items: [],
+                total: 0,
+                user: {name: null},
                 headers: [
-                    {text: 'Name',width:'80%'},
+                    {text: 'Start'},
+                    {text: 'End'},
                     {text: 'work hours'},
+                    {text: ' '},
 
                 ],
             },
             methods: {
-                get_work_time(item){
-                    let t = 0
-                    if (this.to_time !== null && this.from_time !== null) {
-                        for (let dates of item.work_dates_instance) {
-                            t += dates.work_hours
-                        }
-                        return t
-                    } else {
-                        return ''
-                    }
-
-                },
                 init(){
-                    let url = get_url('/users')
+                    let _id = SimpleUrl.get(2)
+                    let url = get_url(`/users/${_id}`)
+
                     axios.get(url, {
                         params: {
                             from_time: this.from_time,
@@ -110,10 +123,14 @@
                         }
                     })
                         .then(res => {
-                            let items = res.data
+                            print(res.data)
+                            this.user = res.data
+
+                            let items = res.data.work_dates_instance
                             this.items = []
+                            this.total = 0
                             for (let item of items) {
-                                item.work_hours = this.get_work_time(item)
+                                this.total += item.work_hours
                             }
                             this.items = items
                         })
@@ -121,6 +138,7 @@
             },
             mounted(){
                 this.init()
+
             }
         })
     </script>

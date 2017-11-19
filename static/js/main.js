@@ -1,4 +1,5 @@
 Vue.options.delimiters = ['${', '}']
+// Vue.use(VueRouter)
 let theme = {
     accent:'#327C36'
 }

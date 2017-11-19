@@ -3,10 +3,11 @@
     <v-container fluid>
         <v-card>
             <v-card-title class="title">
-                <div class="row between-xs middle-xs fill-width pr-3">
+                <div class="row between-xs fill-width pr-3">
                     <h3>所有員工</h3>
-                    <div class="row middle-xs end-xs col-sm-4 col-xs-12">
+                    <div class="row middle-xs end-xs col-sm-6 col-lg-8">
                         <v-menu
+                                class="col-xs-12 col-md"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -27,6 +28,7 @@
                             </v-date-picker>
                         </v-menu>
                         <v-menu
+                                class="col-xs-12 col-md"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -55,14 +57,17 @@
             </v-card-title>
             <v-card-text>
                 <div class="row">
-                    <div class="col-xs-5 col-sm-1 col-md-1 test"
-                         :class="{'mr-5':window_size==='xs'}"
+                    <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1 mr-3"
                     >
-                        <m-btn>Add</m-btn>
+                        <m-btn color="primary">Add</m-btn>
                     </div>
-                    <div class="col-xs-5 col-sm-1 col-md-1 test">
-                        <m-btn>Delete</m-btn>
+                    <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1 mr-3"
+                    >
+                        <m-btn color="error"
+                               :disabled="selected.length===0"
+                        >Delete</m-btn>
                     </div>
+
                 </div>
                 <m-table
                         :headers="headers"
@@ -72,8 +77,13 @@
                         ref="table">
                     <template slot="items" slot-scope="props">
 
-                        <td class="text-xs-left pl-0">${props.item.name}</td>
+                        <td class="text-xs-left pl-0">
+                            <a :href="'/employees/'+props.item.id">${props.item.name}</a>
+                        </td>
                         <td class="text-xs-left pl-0">${props.item.work_hours}</td>
+                        <td class="text-xs-right">
+                            <m-icon @click="">more_vert</m-icon>
+                        </td>
                     </template>
                 </m-table>
             </v-card-text>
@@ -93,6 +103,7 @@
                 headers: [
                     {text: 'Name', width: '80%'},
                     {text: 'work hours'},
+                    {text: ' '},
 
                 ],
             },

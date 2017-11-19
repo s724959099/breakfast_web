@@ -207,3 +207,23 @@ function get_url(path) {
     return `${window.location.origin}/api${path}`
 }
 window.get_url = get_url
+
+
+window.SimpleUrl = {
+    get(index = 0){
+        return window.location.pathname.split("/")[index]
+    },
+    param(name){
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+        /*
+         * window.location.search 獲取URL ?之後的參數(包含問號)
+         * substr(1) 獲取第一個字以後的字串(就是去除掉?號)
+         * match(reg) 用正規表達式檢查是否符合要查詢的參數
+         */
+        let r = window.location.search.substr(1).match(reg)
+        //如果取出的參數存在則取出參數的值否則回穿null
+        debugger
+        if (r != null) return unescape(r[2])
+        return null
+    }
+}

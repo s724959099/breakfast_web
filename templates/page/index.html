@@ -16,13 +16,13 @@
                             <div class="col-xs-6 row">
                                 <span class="col-xs-12 col-sm">上班：</span>
                                 <span class="col-xs-12 col-sm  time red--text lighten-1">
-                                ${work_time(item.work_dates_instance,'from_time')}
+                                ${work_time(item.work_dates_instance[0],'from_time')}
                             </span>
                             </div>
                             <div class="col-xs-6 row">
                                 <span clsas="col-xs-12 col-sm">下班：</span>
                                 <span class="col-xs-12 col-sm time red--text lighten-1">
-                                ${work_time(item.work_dates_instance,'to_time')}
+                                ${work_time(item.work_dates_instance[0],'to_time')}
                             </span>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                 change_work(item){
                     if (this.is_work(item)) {
                         let url = get_url(
-                            `/users/${item.id}/workdates/${item.work_dates_instance.id}`)
+                            `/users/${item.id}/workdates/${item.work_dates_instance[0].id}`)
                         axios.put(url)
                             .then(res => {
                                 this.init()
@@ -62,7 +62,7 @@
                     }
                 },
                 is_work(item){
-                    let result = this.try_it(item.work_dates_instance, 'to_time')
+                    let result = this.try_it(item.work_dates_instance[0], 'to_time')
                     return !(result === false || result !== '')
                 },
                 work_btn_status(item){
