@@ -42,6 +42,13 @@ def employees():
     return render_template("page/employees.html", **local)
 
 
+@app.route("/employees/<_id>")
+def employees_id(_id):
+    local = locals()
+    local.update(my_version)
+    return render_template("page/employees_id.html", **local)
+
+
 @app.route("/test")
 def test():
     local = locals()

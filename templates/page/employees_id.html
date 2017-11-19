@@ -62,7 +62,9 @@
                         ref="table">
                     <template slot="items" slot-scope="props">
 
-                        <td class="text-xs-left pl-0">${props.item.name}</td>
+                        <td class="text-xs-left pl-0" >
+                            <a :href="props.item.id">${props.item.name}</a>
+                        </td>
                         <td class="text-xs-left pl-0">${props.item.work_hours}</td>
                     </template>
                 </m-table>
