@@ -54,6 +54,16 @@
                 </div>
             </v-card-title>
             <v-card-text>
+                <div class="row">
+                    <div class="col-xs-5 col-sm-1 col-md-1 test"
+                         :class="{'mr-5':window_size==='xs'}"
+                    >
+                        <m-btn>Add</m-btn>
+                    </div>
+                    <div class="col-xs-5 col-sm-1 col-md-1 test">
+                        <m-btn>Delete</m-btn>
+                    </div>
+                </div>
                 <m-table
                         :headers="headers"
                         :items="items"
@@ -81,7 +91,7 @@
                 selected: [],
                 items: [],
                 headers: [
-                    {text: 'Name',width:'80%'},
+                    {text: 'Name', width: '80%'},
                     {text: 'work hours'},
 
                 ],

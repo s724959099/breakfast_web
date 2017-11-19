@@ -42,10 +42,34 @@
                 nav__drawer: null,
                 nav__mini: false,
                 nav__items: [
-                    {title: '打卡', icon: 'gavel',href:'/'},
-                    {title: '員工', icon: 'face',href:'/employees'},
-                    {title: '上班時間', icon: 'date_range',href:'/work-time'},
+                    {title: '打卡', icon: 'gavel', href: '/'},
+                    {title: '員工', icon: 'face', href: '/employees'},
+                    {title: '上班時間', icon: 'date_range', href: '/work-time'},
                 ],
+                window__width: 0,
+            },
+            computed: {
+                window_size(){
+                    let w = parseInt(this.window__width)
+                    if (w < 600) {
+                        return 'xs'
+                    } else if (w < 960 && w >= 600) {
+                        return 'sm'
+                    } else if (w < 1264 && w >= 960) {
+                        return 'md'
+                    } else if (w <1904 && w >= 1264) {
+                        return 'lg'
+                    } else if (1904 < w) {
+                        return 'xl'
+                    } else {
+                        return `i dont know:${w}`
+                    }
+                }
+            },
+            watch:{
+                window_size(val){
+                    print("size changed:",val)
+                }
             },
             methods: {
                 toolbar_btn(){
@@ -59,6 +83,10 @@
                 }
             },
             mounted(){
+                window.app = this
+                setInterval(() => {
+                    this.window__width = $(window).width()
+                }, 100)
                 install_theme(this)
             }
         }
