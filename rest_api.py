@@ -16,7 +16,14 @@ def avoid_err(cls):
 class UsersResourece(Resource):
     def get(self):
         item = Users.query.filter_by(deleted=False).all()
-        result = UsersJSON(item)
+        from_time = args_get('from_time')
+        to_time = args_get('to_time')
+        from_time = datetime.datetime.strptime(from_time, '%Y-%m-%d') \
+            if from_time is not None else None
+        to_time = datetime.datetime.strptime(to_time, '%Y-%m-%d') + datetime.timedelta(days=1) \
+            if to_time is not None else None
+
+        result = UsersJSON(item, from_time=from_time, to_time=to_time, arr=True)
         return result
 
     @json_check_var(['name'])
@@ -38,8 +45,10 @@ class UsersIdResourece(Resource):
         result = UsersJSON(item, arr=True)
         from_time = args_get('from_time')
         to_time = args_get('to_time')
-        from_time = datetime.datetime.strptime(from_time, '%Y-%m-%d')
-        to_time = datetime.datetime.strptime(to_time, '%Y-%m-%d') + datetime.timedelta(days=1)
+        from_time = datetime.datetime.strptime(from_time, '%Y-%m-%d') \
+            if from_time is not None else None
+        to_time = datetime.datetime.strptime(to_time, '%Y-%m-%d') + datetime.timedelta(days=1) \
+            if to_time is not None else None
 
         result = UsersJSON(item, from_time=from_time, to_time=to_time, arr=True)
         return result

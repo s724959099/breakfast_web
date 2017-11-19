@@ -4,6 +4,10 @@ from contextlib import contextmanager
 from Model.dbModel import db
 
 
+def get_it(var, default=None):
+    return var if var is not None else default
+
+
 def form_get(var, deafult=None):
     return request.form[var] if request.form.get(var) is not None else deafult
 
