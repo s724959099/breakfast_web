@@ -65,7 +65,7 @@ class UsersIdResourece(Resource):
         return result
 
     def delete(self, _id):
-        item = Users.query.filter_by(deleted=True, id=_id).scalar()
+        item = Users.query.filter_by(deleted=False, id=_id).scalar()
         item.deleted = True
         item.update_date = datetime.datetime.now()
         db.session.commit()

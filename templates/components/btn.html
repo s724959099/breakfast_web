@@ -2,17 +2,18 @@
     <v-btn
             v-bind="$attrs"
             @click.native="click_it"
-    ><slot></slot></v-btn>
+    >
+        <slot></slot>
+    </v-btn>
 </template>
 <script>
     Vue.component('m-btn', {
         delimiters: ['${', '}'],
         template: '#btn',
         data(){
-            return {
-            }
+            return {}
         },
-        methods:{
+        methods: {
             click_it(){
                 this.$emit("click")
             }

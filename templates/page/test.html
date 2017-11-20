@@ -1,29 +1,28 @@
 {% extends "layout_base.html" %}
 {% block body %}
     <v-container>
-                <div class="row test">
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-                    <div class="col-xs-1 mr-3 mt-3"><div class="test-box"></div></div>
-
-
-                </div>
+        <only_modal v-model="d_modal">
+            <v-card-title><h3>新增使用者</h3></v-card-title>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <m-btn color="primary" flat @click="cancel">CANCEL</m-btn>
+                <m-btn color="primary" flat @click="">OK</m-btn>
+            </v-card-actions>
+        </only_modal>
     </v-container>
 {% endblock %}
 {% block script %}
     <script>
         new Vue({
-            mixins:[app],
-            data:{
+            mixins: [app],
+            data: {
+                d_modal: true
+            },
+            methods:{
+                ok(){},
+                cancel(){
+                    $emit('cancel')
+                }
             }
         })
     </script>

@@ -1,6 +1,36 @@
 {% extends "layout_base.html" %}
 {% block body %}
     <v-container fluid>
+
+        <only_modal v-model="new_modal">
+            <v-card-title><h3>新增使用者</h3></v-card-title>
+            <v-card-text>
+                <v-text-field
+                        label="Name"
+                        v-model="name"
+                ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <m-btn color="primary" flat @click="new_cancel">CANCEL</m-btn>
+                <m-btn color="primary" flat @click="new_ok">OK</m-btn>
+            </v-card-actions>
+        </only_modal>
+
+        <only_modal v-model="delete_modal"
+                    small
+        >
+            <v-card-title><h3>確認</h3></v-card-title>
+            <v-card-text>
+                確認刪除嗎
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <m-btn color="primary" flat @click="delete_cancel">Cancel</m-btn>
+                <m-btn color="primary" flat @click="delete_ok">Confirm</m-btn>
+            </v-card-actions>
+        </only_modal>
+
         <v-card>
             <v-card-title class="title">
                 <div class="row between-xs fill-width pr-3">
@@ -59,13 +89,18 @@
                 <div class="row">
                     <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1 mr-3"
                     >
-                        <m-btn color="primary">Add</m-btn>
+                        <m-btn color="primary"
+                               @click="new_modal = true"
+                        >Add
+                        </m-btn>
                     </div>
                     <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1 mr-3"
                     >
                         <m-btn color="error"
                                :disabled="selected.length===0"
-                        >Delete</m-btn>
+                               @click="delete_modal = true"
+                        >Delete
+                        </m-btn>
                     </div>
 
                 </div>
@@ -74,6 +109,7 @@
                         :items="items"
                         v-model="selected"
                         selectable
+                        key_id="id"
                         ref="table">
                     <template slot="items" slot-scope="props">
 
@@ -96,7 +132,10 @@
         new Vue({
             mixins: [app],
             data: {
+                delete_modal: false,
+                new_modal: false,
                 from_time: null,
+                name: null,
                 to_time: null,
                 selected: [],
                 items: [],
@@ -108,6 +147,31 @@
                 ],
             },
             methods: {
+                new_ok(){
+                    let url = get_url("/users")
+                    axios.post(url, {
+                        name: this.name
+                    }).then(res => {
+                        this.init()
+                    })
+                    this.new_modal = false
+                    this.name = null
+                },
+                new_cancel(){
+                    this.new_modal = false
+                    this.name = null
+                },
+                delete_ok(){
+                    for(let item of  this.selected){
+                        let url = get_url(`/users/${item.id}`)
+                        axios.delete(url)
+                    }
+                    this.items.remove(this.selected)
+                    this.delete_modal = false
+                },
+                delete_cancel(){
+                    this.delete_modal = false
+                },
                 get_work_time(item){
                     let t = 0
                     if (this.to_time !== null && this.from_time !== null) {

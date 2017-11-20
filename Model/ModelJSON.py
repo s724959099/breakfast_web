@@ -94,7 +94,8 @@ class UsersJSON(BaseModelJSON):
         if kwargs.get('deep', True):
             instance = item.work_dates.filter_by(deleted=False).order_by(WorkDates.create_date.desc())
             if kwargs.get('from_time') is not None and kwargs.get('to_time') is not None:
-                instance = instance.filter(WorkDates.from_time >= kwargs.get('from_time'),WorkDates.to_time <= kwargs.get('to_time'))
+                instance = instance.filter(WorkDates.from_time >= kwargs.get('from_time'),
+                                           WorkDates.to_time <= kwargs.get('to_time'))
             item.work_dates_instance = check_arr_instance(
                 kwargs,
                 instance,
@@ -116,8 +117,7 @@ class WorkDatesJSON(BaseModelJSON):
                 work_hours = item.to_time - item.from_time
                 seconds = work_hours.total_seconds()
                 h = seconds / (60 * 60)
-                h -= 0.05
-                h = round(h, 1)
+                h -= h % 0.5
                 item.work_hours = h
 
         return BaseJSON(item)

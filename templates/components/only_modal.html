@@ -1,0 +1,119 @@
+<template id="only_modal">
+    <v-dialog v-model="dialog"
+              ref="dialog"
+              :max-width="dialog_width()"
+              :persistent="true"
+    >
+        <v-card ref="card">
+            <slot
+            ></slot>
+        </v-card>
+    </v-dialog>
+</template>
+<script>
+    Vue.component('only_modal', {
+        template: "#only_modal",
+        props: {
+            value: {
+                type: Boolean,
+                default: false,
+            },
+            small: {
+                type: Boolean,
+                default: false,
+            },
+            large: {
+                type: Boolean,
+                default: false,
+            },
+            superLarge: {
+                type: Boolean,
+                default: false,
+            },
+            title: {
+                type: String,
+                default: "Modal",
+            },
+            modalTop: {
+                type: Boolean,
+                default: false,
+            },
+            okText: {
+                type: String,
+                default: "儲存",
+            },
+            cancelText: {
+                type: String,
+                default: "取消",
+            },
+            closeByShadow: {
+                type: Boolean,
+                default: true,
+            }
+
+        },
+        data () {
+            let width = $(this.$refs.card).children().width()
+            return {
+                width: width,
+                dialog: this.value,
+                click_ok: false,
+            }
+        },
+        methods: {
+            change_width(){
+                this.width = $(this.$refs.card).children().width()
+            },
+            dialog_width(){
+                if (this.superLarge) return 1225
+                if (this.small) return 300
+                if (this.large) return 900
+                return 600
+            },
+            ok(){
+                this.click_ok = true
+                this.dialog = false
+            },
+            cancel(){
+                this.click_ok = false
+                this.dialog = false
+                this.$emit("cancel")
+                this.$emit("input",false)
+            },
+            init(){
+                if (this.modalTop) {
+                    let $el = $(".dialog")
+                    $el.css({
+                        "align-self": "flex-start",
+                        "margin-top": "50px"
+                    })
+                }
+                if (this.closeByShadow) {
+                    $("#app").off("click")
+                    $("#app").on("click", (e) => {
+                        if (e.target === $(".overlay.overlay--active")[0]) {
+                            this.cancel()
+                        }
+                    })
+                }
+            }
+        },
+        watch: {
+            value(val){
+                this.dialog = val
+            },
+            closeByShadow(val){
+                if (!val) {
+                    $("#app").off("click")
+                }
+            },
+        },
+        mounted(){
+            this.change_width()
+            this.init()
+        },
+        updated(){
+            this.init()
+        },
+    })
+</script>

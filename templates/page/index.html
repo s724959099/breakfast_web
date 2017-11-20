@@ -1,48 +1,48 @@
 {% extends "layout_base.html" %}
 {% block body %}
     <v-container>
-                <v-card v-for="item in users"
-                        class="mb-5"
-                        :key="item.id"
-                >
-                    <v-card-title class="card-title">
-                        ${item.name}
-                    </v-card-title>
-                    <v-card-text>
-                        <div class="row">
-                            最後上下班時間
-                        </div>
-                        <div class="row between-xs">
-                            <div class="col-xs-6 row">
-                                <span class="col-xs-12 col-sm">上班：</span>
-                                <span class="col-xs-12 col-sm  time red--text lighten-1">
+        <v-card v-for="item in users"
+                class="mb-5"
+                :key="item.id"
+        >
+            <v-card-title class="card-title">
+                ${item.name}
+            </v-card-title>
+            <v-card-text>
+                <div class="row">
+                    最後上下班時間
+                </div>
+                <div class="row between-xs">
+                    <div class="col-xs-6 row">
+                        <span class="col-xs-12 col-sm">上班：</span>
+                        <span class="col-xs-12 col-sm  time red--text lighten-1">
                                 ${work_time(item.work_dates_instance[0],'from_time')}
                             </span>
-                            </div>
-                            <div class="col-xs-6 row">
-                                <span clsas="col-xs-12 col-sm">下班：</span>
-                                <span class="col-xs-12 col-sm time red--text lighten-1">
+                    </div>
+                    <div class="col-xs-6 row">
+                        <span clsas="col-xs-12 col-sm">下班：</span>
+                        <span class="col-xs-12 col-sm time red--text lighten-1">
                                 ${work_time(item.work_dates_instance[0],'to_time')}
                             </span>
-                            </div>
-                        </div>
-                        <m-btn class="fill-width mt-20px"
-                               :color="is_work(item)?'error':'success'"
-                               @click="change_work(item)"
-                        >
-                            ${work_btn_status(item)}
-                        </m-btn>
-                    </v-card-text>
-                </v-card>
-            </v-container>
+                    </div>
+                </div>
+                <m-btn class="fill-width mt-20px"
+                       :color="is_work(item)?'error':'success'"
+                       @click="change_work(item)"
+                >
+                    ${work_btn_status(item)}
+                </m-btn>
+            </v-card-text>
+        </v-card>
+    </v-container>
 
 {% endblock %}
 {% block script %}
     <script>
         new Vue({
-            mixins:[app],
+            mixins: [app],
             data: {
-                users: []
+                users: [],
             },
             methods: {
                 change_work(item){
